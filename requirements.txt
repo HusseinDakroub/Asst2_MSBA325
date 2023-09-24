@@ -1,2 +1,2 @@
 plotly==4.0.1
-plotly.express
+
