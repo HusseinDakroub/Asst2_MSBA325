@@ -9,8 +9,8 @@ import plotly.graph_objects as go
 url = "https://raw.githubusercontent.com/HusseinDakroub/Asst2_MSBA325/main/global_pop.csv"
 df= pd.read_csv(url)
 
-st.title("Global")
-st.subheader("Hello")
+st.title("Global Population")
+
 if( st.checkbox("Checking the factors of our dataset")):
     st.subheader("Factors: ")
     st.write(df.columns)
