@@ -10,7 +10,7 @@ url = "https://raw.githubusercontent.com/HusseinDakroub/Asst2_MSBA325/main/globa
 df= pd.read_csv(url)
 
 st.title("Global Population")
-
+st.subheader("Hello")
 if( st.checkbox("Checking the factors of our dataset")):
     st.subheader("Factors: ")
     st.write(df.columns)
