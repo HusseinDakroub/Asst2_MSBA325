@@ -42,6 +42,9 @@ fig0.update_layout(
 )
 st.plotly_chart(fig0)
 
+st.write("There's a noticeable concentration of data points (countries) with life expectancies ranging from 60 to 80 years and with urban populations below 5 million.
+Only a few data points have urban populations that surpass the 10 million mark. This could represent highly urbanized countries or countries with vast metropolitan areas.")
+
 st.markdown("### Global Death Rate Visualization")
 st.write("The map below showcases the death rate of various countries, color-coded and animated over the years.")
 fig = px.choropleth(df, locations = "Country", locationmode="country names", color = "Death Rate", hover_name = "Country", animation_frame = "Year", color_continuous_scale = px.colors.sequential.Plasma, projection = "natural earth")
