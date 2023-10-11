@@ -1,3 +1,4 @@
+# Import necessary libraries
 import pandas as pd
 import numpy as np
 import plotly
@@ -5,30 +6,32 @@ import plotly.express as px
 import streamlit as st
 import plotly.graph_objects as go
 
-
+# Fetch and load the dataset from the provided URL
 url = "https://raw.githubusercontent.com/HusseinDakroub/Asst2_MSBA325/main/global_pop.csv"
 df= pd.read_csv(url)
 
+# Set the Streamlit title
 st.title("Global Population")
 
-if( st.checkbox("Checking the factors of our dataset")):
-    st.subheader("Factors: ")
+st.markdown("### Dataset Overview")
+st.write("Below, you can check the columns (or factors) of the dataset and also view the raw data:")
+
+# Allow users to check the factors/columns of the dataset
+if( st.checkbox("Show Columns of the Dataset")):
+    st.subheader("Columns: ")
     st.write(df.columns)
 
-
-st.subheader("Click on the checkbox if you want to see the Data")
-if( st.checkbox("Show raw Data")):
+# Allow users to view the raw dataset
+if( st.checkbox("Show Raw Data")):
     st.subheader("Raw data")
     st.write(df)
 
-
 df1 = df.query("Year == 2021")
 
-#Figure 1
-st.subheader("urban population")
+st.markdown("### Urban vs. Rural Population")
+st.write("This scatter plot visualizes the urban and rural populations of different countries, animated over the years. The X-axis represents the life expectancy, and the Y-axis shows the population numbers.")
 fig0 = px.scatter(df, x = "Life Expectancy", y = "Urban Population", color = "Country", animation_frame = "Year", animation_group = "Country")
 fig0.add_trace(go.Scatter(x=df1["Life Expectancy"], y=df1["Rural Population"], mode="markers", name="Rural Population", marker=dict(color="red")))
-
 fig0.update_layout(
     yaxis2=dict(
         title="Rural Population",
@@ -37,45 +40,29 @@ fig0.update_layout(
         showgrid=False,
     )
 )
-
 st.plotly_chart(fig0)
 
-
-#Figure 2
-st.subheader("Map")
+st.markdown("### Global Death Rate Visualization")
+st.write("The map below showcases the death rate of various countries, color-coded and animated over the years.")
 fig = px.choropleth(df, locations = "Country", locationmode="country names", color = "Death Rate", hover_name = "Country", animation_frame = "Year", color_continuous_scale = px.colors.sequential.Plasma, projection = "natural earth")
 st.plotly_chart(fig)
 
-
-#Figure 3
-st.subheader("Getting the values of the birth rate over years")
+st.markdown("### Birth Rate Over Years")
+st.write("This horizontal box plot displays the distribution of birth rates over various years.")
 fig2 = px.box(df, x = "Birth Rate", y = "Year", orientation = "h")
 st.plotly_chart(fig2)
 
-#Figure 4
-fig3 = go.Figure()
-
-
-
-st.subheader("Checking the Birth and Death rates in Rural/Urban Population")
-
-# Add a slider to switch between factors
+st.markdown("### Comparing Birth and Death Rates")
+st.write("The interactive bar chart below allows you to compare birth and death rates for both urban and rural populations. Use the slider to switch between urban and rural data.")
 factor = st.slider("Select 0 for Urban and 1 for Rural:", min_value=0, max_value=1, step=1)
-
-# Modify the plot based on the selected factor
+fig3 = go.Figure()
 if factor == 0:
-    # Plot Birth Rate and Death Rate for Urban Population
     fig3.add_trace(go.Bar(x=df["Year"], y=df["Birth Rate"], name="Urban Birth Rate"))
     fig3.add_trace(go.Bar(x=df["Year"], y=df["Death Rate"], name="Urban Death Rate"))
     fig3.update_layout(title="Birth Rate and Death Rate for Urban Population Over the Years")
 else:
-    # Plot Birth Rate and Death Rate for Rural Population
     fig3.add_trace(go.Bar(x=df["Year"], y=df["Birth Rate"], name="Rural Birth Rate"))
     fig3.add_trace(go.Bar(x=df["Year"], y=df["Death Rate"], name="Rural Death Rate"))
     fig3.update_layout(title="Birth Rate and Death Rate for Rural Population Over the Years")
-
-# Update layout for a grouped bar chart
 fig3.update_layout(barmode='group')
-
-# Re-display the modified plot
 st.plotly_chart(fig3)
